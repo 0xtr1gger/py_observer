@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template
-from platform import system, version, release, machine, architecture, processor
+from platform import system, version, release, machine, architecture, node, python_version
 import requests
 import psutil
 import os
@@ -25,32 +25,26 @@ def cpu():
 
 @app.route('/platform')
 def platform():
-    cpu = processor()
-    if cpu == '':
-        cpu = 'Unknown'
     platform_info = {
         'Operating System': system(),
         'OS version': version(),
         'OS release': release(),
         'Machine': machine(),
-        'Platform Architecture': architecture(),
-        'Platform processor': cpu
+        'Platform Architecture': architecture()
     }
     return jsonify(platform_info)
 
 @app.route('/system-info')
 def system_info():
     info = {
-        "OS": platform.system(),
-        "OS Version": platform.version(),
-        "Architecture": platform.architecture(),
-        "Machine": platform.machine(),
-        "Node": platform.node(),
-        "Processor": platform.processor(),
-        "Python Version": platform.python_version(),
-        "Environment Variables": dict(os.environ)
+        'OS': system(),
+        'OS Version': version(),
+        'Architecture': architecture(),
+        'Machine': machine(),
+        'Node': node(),
+        'Python Version': python_version()
     }
     return jsonify(info)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
